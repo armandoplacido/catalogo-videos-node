@@ -1,5 +1,3 @@
-import { Notification } from './notification'
-
 export type FieldsErrors = {
   [field: string]: string[]
 }

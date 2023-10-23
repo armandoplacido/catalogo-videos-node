@@ -6,18 +6,18 @@ export class CategoryRules {
   @MaxLength(255)
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name: string
 
   @IsString()
   @IsOptional()
-  description: string | null;
+  description: string | null
 
   @IsBoolean()
   @IsNotEmpty()
-  isActive: boolean;
+  isActive: boolean
 
   constructor(entity: Category) {
-    Object.assign(this, entity);
+    Object.assign(this, entity)
   }
 }
 
@@ -29,6 +29,6 @@ export class CategoryValidator extends ClassValidatorFields<CategoryRules> {
 
 export class CategoryValidatorFactory {
   static create() {
-    return new CategoryValidator();
+    return new CategoryValidator()
   }
 }
