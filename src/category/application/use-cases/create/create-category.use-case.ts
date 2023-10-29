@@ -1,28 +1,22 @@
 
 import { UseCase } from "../../../../shared/application/use-case.interface"
+import { EntityValidationError } from "../../../../shared/domain/validators/validation.error"
 import { Category } from "../../../domain/category.entity"
 import { CategoryRepository } from "../../../domain/category.repository"
 import { CategoryOutput, CategoryOutputMapper } from "../common/category-output"
-
-
-
-export type CreateCategoryRequest = {
-  name:string
-  description?: string | null
-  isActive?: boolean
-}
-
-export type CreateCategoryResponse = {
-  category: CategoryOutput
-}
+import { CreateCategoryInput } from "./create-category.input"
 
 export class CreateCategoryUseCase 
-  implements UseCase<CreateCategoryRequest, CreateCategoryResponse> {
+  implements UseCase<CreateCategoryInput, CreateCategoryOutput> {
 
   constructor(private readonly categoryRepository: CategoryRepository){}
 
-  async execute(input: CreateCategoryRequest): Promise<CreateCategoryResponse> {
+  async execute(input: CreateCategoryInput): Promise<CreateCategoryOutput> {
     const aCategory = Category.create(input)
+
+    if (aCategory.notification.hasErrors()) {
+      throw new EntityValidationError(aCategory.notification.toJSON());
+    }
 
     await this.categoryRepository.insert(aCategory)
 
@@ -30,4 +24,8 @@ export class CreateCategoryUseCase
       category: CategoryOutputMapper.toOutput(aCategory)
     }
   }
+}
+
+export type CreateCategoryOutput = {
+  category: CategoryOutput
 }

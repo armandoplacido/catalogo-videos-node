@@ -1,5 +1,4 @@
-import { Sequelize } from 'sequelize-typescript'
-import { EntityValidationError } from '../../../../../shared/domain/validators/validation.error'
+import { LoadEntityError } from '../../../../../shared/domain/validators/validation.error'
 import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo'
 import { Category } from '../../../../domain/category.entity'
 import { CategoryModel } from '../category.model'
@@ -19,15 +18,15 @@ describe('CategoryModelMapper Integration Tests', () => {
       name: 'a'.repeat(256),
     })
     try {
-      CategoryModelMapper.toEntity(aCategoryModel)
-      fail('The category is valid, but it needs throws a EntityValidationError')
+      CategoryModelMapper.toEntity(aCategoryModel);
+      fail('The category is valid, but it needs throws a EntityValidationError');
     } catch (e) {
-      expect(e).toBeInstanceOf(EntityValidationError)
-      expect((e as EntityValidationError).error).toMatchObject(
+      expect(e).toBeInstanceOf(LoadEntityError);
+      expect((e as LoadEntityError).error).toMatchObject([
         {
           name: ['name must be shorter than or equal to 255 characters'],
         },
-      )
+      ]);
     }
   })
 

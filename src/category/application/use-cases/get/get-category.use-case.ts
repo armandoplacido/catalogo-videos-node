@@ -6,11 +6,11 @@ import { CategoryRepository } from "../../../domain/category.repository";
 import { CategoryOutput, CategoryOutputMapper } from "../common/category-output";
 
 export class GetCategoryUseCase
-  implements UseCase<GetCategoryRequest,GetdCategoryResponse> {
+  implements UseCase<GetCategoryInput,GetdCategoryOutput> {
 
     constructor(private readonly categoryRepository: CategoryRepository){}
 
-  async execute(input: GetCategoryRequest): Promise<GetdCategoryResponse> {
+  async execute(input: GetCategoryInput): Promise<GetdCategoryOutput> {
     const anID = new Uuid(input.id)
     const aCategory = await this.categoryRepository.findById(anID)
 
@@ -25,10 +25,10 @@ export class GetCategoryUseCase
 }
 
 
-export type GetCategoryRequest = {
+export type GetCategoryInput = {
   id: string
 }
 
-export type GetdCategoryResponse = {
+export type GetdCategoryOutput = {
   category: CategoryOutput
 }

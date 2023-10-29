@@ -5,11 +5,11 @@ import { Category } from "../../../domain/category.entity";
 import { CategoryRepository } from "../../../domain/category.repository";
 
 export class DeleteCategoryUseCase 
-  implements UseCase<DeleteCategoryRequest, DeleteCategoryResponse> {
+  implements UseCase<DeleteCategoryInput, DeleteCategoryOutput> {
 
     constructor(private readonly categoryRepository:CategoryRepository){}
 
-  async execute(input: DeleteCategoryRequest): Promise<DeleteCategoryResponse> {
+  async execute(input: DeleteCategoryInput): Promise<DeleteCategoryOutput> {
     const anID = new Uuid(input.id)
     
     const aCategory = await this.categoryRepository.findById(anID)
@@ -23,8 +23,8 @@ export class DeleteCategoryUseCase
 }
 
 
-export type DeleteCategoryRequest = {
+export type DeleteCategoryInput = {
   id:string
 }
 
-export type DeleteCategoryResponse = void
+export type DeleteCategoryOutput = void
