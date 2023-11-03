@@ -6,27 +6,8 @@ import {
 import Joi from 'joi'
 import { join } from 'path'
 
-@Module({})
-export class ConfigModule extends NestConfigModule {
-  static forRoot(options: ConfigModuleOptions = {}) {
-    const { envFilePath, ...otherOptions } = options
-    return super.forRoot({
-      isGlobal: true,
-      envFilePath: [
-        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath]),
-        join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`),
-        join(process.cwd(), 'envs', `.env`),
-      ],
-      validationSchema: Joi.object({
-        ...CONFIG_DB_SCHEMA,
-      }),
-      ...otherOptions,
-    })
-  }
-}
-
 type DB_SCHEMA_TYPE = {
-  DB_VENDOR: 'mtsql' | 'sqlite'
+  DB_VENDOR: 'mysql' | 'sqlite'
   DB_HOST: string
   DB_PORT: number
   DB_USERNAME: string
@@ -35,8 +16,6 @@ type DB_SCHEMA_TYPE = {
   DB_LOGGING: boolean
   DB_AUTO_LOAD_MODELS: boolean
 }
-
-export type CONFIG_SCHEMA_TPYE = DB_SCHEMA_TYPE
 
 export const CONFIG_DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
   DB_VENDOR: Joi.string().required().valid('mysql', 'sqlite'),
@@ -59,4 +38,26 @@ export const CONFIG_DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
   }),
   DB_LOGGING: Joi.boolean().required(),
   DB_AUTO_LOAD_MODELS: Joi.boolean().required(),
+}
+
+export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE
+
+@Module({})
+export class ConfigModule extends NestConfigModule {
+  static forRoot(options: ConfigModuleOptions = {}) {
+    const { envFilePath, ...otherOptions } = options
+
+    return super.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath]),
+        join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`),
+        join(process.cwd(), 'envs', `.env`),
+      ],
+      validationSchema: Joi.object({
+        ...CONFIG_DB_SCHEMA,
+      }),
+      ...otherOptions,
+    })
+  }
 }
