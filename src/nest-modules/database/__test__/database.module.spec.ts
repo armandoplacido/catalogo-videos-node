@@ -65,7 +65,6 @@ describe('DatabaseModule Unit Tests', () => {
       const app = module.createNestApplication()
       const conn = app.get<Sequelize>(getConnectionToken())
       expect(conn).toBeDefined()
-      console.log(conn.options)
       expect(conn.options.dialect).toBe(connOptions.DB_VENDOR)
       expect(conn.options.host).toBe(connOptions.DB_HOST)
       expect(conn.options.database).toBe(connOptions.DB_DATABASE)
