@@ -32,6 +32,10 @@ describe('NotFoundErrorFilter Unit Test', () => {
     await app.init()
   })
 
+  afterEach(async () => {
+    await app?.close()
+  })
+
   it('should catch a EntityValidationError', () => {
     return request(app.getHttpServer()).get('/stub').expect(404).expect({
       statusCode: 404,

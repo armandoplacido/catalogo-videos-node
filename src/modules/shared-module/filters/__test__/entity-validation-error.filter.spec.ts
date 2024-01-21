@@ -32,6 +32,10 @@ describe('EntityValidationErrorFilter Unit Test', () => {
     await app.init()
   })
 
+  afterEach(async () => {
+    await app?.close()
+  })
+
   it('should catch a EntityValidationError', () => {
     return request(app.getHttpServer())
       .get('/stub')
