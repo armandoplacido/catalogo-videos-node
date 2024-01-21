@@ -12,3 +12,6 @@ Content-Type: application/json
 
 ### Get Categories
 GET http://localhost:3000/categories
+
+### Get Category By Id
+GET http://localhost:3000/categories/249b5021-eb43-4bdb-b195-c3560e50393e
