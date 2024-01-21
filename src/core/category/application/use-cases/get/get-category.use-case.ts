@@ -6,11 +6,11 @@ import { NotFoundError } from '@core/shared/domain/errors/not-found.error'
 import { Category } from '@core/category/domain/category.entity'
 
 export class GetCategoryUseCase
-  implements UseCase<GetCategoryInput, GetdCategoryOutput>
+  implements UseCase<GetCategoryInput, GetCategoryOutput>
 {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(input: GetCategoryInput): Promise<GetdCategoryOutput> {
+  async execute(input: GetCategoryInput): Promise<GetCategoryOutput> {
     const anID = new Uuid(input.id)
     const aCategory = await this.categoryRepository.findById(anID)
 
@@ -18,9 +18,7 @@ export class GetCategoryUseCase
       throw new NotFoundError(input.id, Category)
     }
 
-    return {
-      category: CategoryOutputMapper.toOutput(aCategory),
-    }
+    return CategoryOutputMapper.toOutput(aCategory)
   }
 }
 
@@ -28,6 +26,4 @@ export type GetCategoryInput = {
   id: string
 }
 
-export type GetdCategoryOutput = {
-  category: CategoryOutput
-}
+export type GetCategoryOutput = CategoryOutput

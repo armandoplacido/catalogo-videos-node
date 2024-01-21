@@ -32,7 +32,7 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
       id: entity.categoryId.id,
       name: 'test',
     })
-    expect(output.category).toStrictEqual({
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: entity.description,
@@ -149,7 +149,7 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
         ...('isActive' in i.input && { isActive: i.input.isActive }),
       })
       const entityUpdated = await repository.findById(new Uuid(i.input.id))
-      expect(output.category).toStrictEqual({
+      expect(output).toStrictEqual({
         id: entity.categoryId.id,
         name: i.expected.name,
         description: i.expected.description,

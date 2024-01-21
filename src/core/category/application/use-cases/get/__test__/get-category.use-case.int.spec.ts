@@ -28,7 +28,7 @@ describe('GetCategoryUseCase Integration Tests', () => {
     const category = Category.fake().aCategory().build()
     await repository.insert(category)
     const output = await useCase.execute({ id: category.categoryId.id })
-    expect(output.category).toStrictEqual({
+    expect(output).toStrictEqual({
       id: category.categoryId.id,
       name: category.name,
       description: category.description,

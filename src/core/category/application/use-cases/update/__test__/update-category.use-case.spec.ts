@@ -53,7 +53,7 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
       name: 'test',
     })
     expect(spyUpdate).toHaveBeenCalledTimes(1)
-    expect(output.category).toStrictEqual({
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: null,
@@ -169,7 +169,7 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
         ...('description' in i.input && { description: i.input.description }),
         ...('isActive' in i.input && { isActive: i.input.isActive }),
       })
-      expect(output.category).toStrictEqual({
+      expect(output).toStrictEqual({
         id: entity.categoryId.id,
         name: i.expected.name,
         description: i.expected.description,

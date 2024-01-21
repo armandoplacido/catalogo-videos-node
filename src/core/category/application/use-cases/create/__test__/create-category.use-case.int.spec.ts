@@ -17,8 +17,8 @@ describe('CreateCategoryUseCase Integration Tests', () => {
 
   it('should create a category', async () => {
     let output = await useCase.execute({ name: 'test' })
-    let entity = await repository.findById(new Uuid(output.category.id))
-    expect(output.category).toStrictEqual({
+    let entity = await repository.findById(new Uuid(output.id))
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: null,
@@ -30,8 +30,8 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       name: 'test',
       description: 'some description',
     })
-    entity = await repository.findById(new Uuid(output.category.id))
-    expect(output.category).toStrictEqual({
+    entity = await repository.findById(new Uuid(output.id))
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: 'some description',
@@ -44,8 +44,8 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       description: 'some description',
       isActive: true,
     })
-    entity = await repository.findById(new Uuid(output.category.id))
-    expect(output.category).toStrictEqual({
+    entity = await repository.findById(new Uuid(output.id))
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: 'some description',
@@ -58,8 +58,8 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       description: 'some description',
       isActive: false,
     })
-    entity = await repository.findById(new Uuid(output.category.id))
-    expect(output.category).toStrictEqual({
+    entity = await repository.findById(new Uuid(output.id))
+    expect(output).toStrictEqual({
       id: entity.categoryId.id,
       name: 'test',
       description: 'some description',

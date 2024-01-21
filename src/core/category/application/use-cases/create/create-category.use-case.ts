@@ -19,12 +19,8 @@ export class CreateCategoryUseCase
 
     await this.categoryRepository.insert(aCategory)
 
-    return {
-      category: CategoryOutputMapper.toOutput(aCategory),
-    }
+    return CategoryOutputMapper.toOutput(aCategory)
   }
 }
 
-export type CreateCategoryOutput = {
-  category: CategoryOutput
-}
+export type CreateCategoryOutput = CategoryOutput

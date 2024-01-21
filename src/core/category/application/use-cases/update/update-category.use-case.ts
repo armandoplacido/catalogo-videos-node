@@ -5,6 +5,7 @@ import { Uuid } from '@core/shared/domain/value-objects/uuid.vo'
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error'
 import { Category } from '@core/category/domain/category.entity'
 import { EntityValidationError } from '@core/shared/domain/validators/validation.error'
+import { UpdateCategoryInput } from './update-category.input'
 
 export class UpdateCategoryUseCase
   implements UseCase<UpdateCategoryInput, UpdatedCategoryOutput>
@@ -21,7 +22,7 @@ export class UpdateCategoryUseCase
 
     input.name && aCategory.changeName(input.name)
 
-    if ('description' in input) {
+    if (input.description !== undefined) {
       aCategory.changeDescription(input.description)
     }
 
@@ -39,19 +40,8 @@ export class UpdateCategoryUseCase
 
     await this.categoryRepository.update(aCategory)
 
-    return {
-      category: CategoryOutputMapper.toOutput(aCategory),
-    }
+    return CategoryOutputMapper.toOutput(aCategory)
   }
 }
 
-export type UpdateCategoryInput = {
-  id: string
-  name?: string
-  description?: string
-  isActive?: boolean
-}
-
-export type UpdatedCategoryOutput = {
-  category: CategoryOutput
-}
+export type UpdatedCategoryOutput = CategoryOutput

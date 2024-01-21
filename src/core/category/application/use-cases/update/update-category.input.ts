@@ -6,16 +6,21 @@ import {
   validateSync,
 } from 'class-validator'
 
-export type UpdatedCategoryInputConstructorProps = {
-  name: string
+export type UpdateCategoryInputConstructorProps = {
+  id: string
+  name?: string
   description?: string | null
-  isActive: boolean
+  isActive?: boolean
 }
 
-export class UpdatedCategoryInput {
+export class UpdateCategoryInput {
   @IsString()
   @IsNotEmpty()
-  name: string
+  id: string
+
+  @IsString()
+  @IsOptional()
+  name?: string
 
   @IsString()
   @IsOptional()
@@ -23,18 +28,21 @@ export class UpdatedCategoryInput {
 
   @IsBoolean()
   @IsOptional()
-  isActive: boolean
+  isActive?: boolean
 
-  constructor(props: UpdatedCategoryInput) {
+  constructor(props?: UpdateCategoryInputConstructorProps) {
     if (!props) return
-    this.name = props.name
-    this.description = props.description
-    this.isActive = props.isActive
+    this.id = props.id
+    props.name && (this.name = props.name)
+    props.description && (this.description = props.description)
+    props.isActive !== null &&
+      props.isActive !== undefined &&
+      (this.isActive = props.isActive)
   }
 }
 
 export class ValidateCategoryInput {
-  static validate(input: UpdatedCategoryInput) {
+  static validate(input: UpdateCategoryInput) {
     return validateSync(input)
   }
 }

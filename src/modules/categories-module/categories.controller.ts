@@ -6,30 +6,87 @@ import {
   Patch,
   Param,
   Delete,
+  Inject,
+  ParseUUIDPipe,
+  Query,
+  HttpCode,
 } from '@nestjs/common'
+import { CreateCategoryUseCase } from '@core/category/application/use-cases/create/create-category.use-case'
+import { UpdateCategoryUseCase } from '@core/category/application/use-cases/update/update-category.use-case'
+import { DeleteCategoryUseCase } from '@core/category/application/use-cases/delete/delete-category.use-case'
+import { GetCategoryUseCase } from '@core/category/application/use-cases/get/get-category.use-case'
+import { ListCategoriesUseCase } from '@core/category/application/use-cases/list/list-categories.use-case'
 import { CreateCategoryDto } from './dto/create-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
-import { CategorySequelizeRepository } from '@core/category/infra/db/sequelize/category-sequelize.repository'
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from './categories.presenter'
+import { CategoryOutput } from '@core/category/application/use-cases/common/category-output'
+import { SearchCategoriesDto } from './dto/search-categories.dto'
 
 @Controller('categories')
 export class CategoriesController {
-  constructor() {}
+  @Inject(CreateCategoryUseCase)
+  private createUseCase: CreateCategoryUseCase
+
+  @Inject(UpdateCategoryUseCase)
+  private updateUseCase: UpdateCategoryUseCase
+
+  @Inject(DeleteCategoryUseCase)
+  private deleteUseCase: DeleteCategoryUseCase
+
+  @Inject(GetCategoryUseCase)
+  private getUseCase: GetCategoryUseCase
+
+  @Inject(ListCategoriesUseCase)
+  private listUseCase: ListCategoriesUseCase
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {}
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
+    const output = await this.createUseCase.execute(createCategoryDto)
+
+    return CategoriesController.serialize(output)
+  }
 
   @Get()
-  findAll() {}
+  async search(@Query() searchParamsDto: SearchCategoriesDto) {
+    const output = await this.listUseCase.execute(searchParamsDto)
+
+    return new CategoryCollectionPresenter(output)
+  }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {}
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    const output = await this.getUseCase.execute({ id })
+
+    return CategoriesController.serialize(output)
+  }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-  ) {}
+  ) {
+    const output = await this.updateUseCase.execute({
+      ...updateCategoryDto,
+      id,
+    })
 
+    return CategoriesController.serialize(output)
+  }
+
+  @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {}
+  remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    return this.deleteUseCase.execute({ id })
+  }
+
+  static serialize(output: CategoryOutput) {
+    return new CategoryPresenter(output)
+  }
 }
