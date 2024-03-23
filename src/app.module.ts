@@ -8,8 +8,8 @@ import { SharedModule } from '@modules/shared-module/shared.module'
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
-    CategoriesModule,
     SharedModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],
